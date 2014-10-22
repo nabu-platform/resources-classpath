@@ -10,6 +10,7 @@ import be.nabu.libs.resources.ResourceReadableContainer;
 import be.nabu.libs.resources.ResourceUtils;
 import be.nabu.libs.resources.api.ReadableResource;
 import be.nabu.libs.resources.api.Resource;
+import be.nabu.libs.resources.api.ResourceContainer;
 import be.nabu.libs.resources.api.ResourceRoot;
 import be.nabu.utils.io.IOUtils;
 import be.nabu.utils.io.api.ByteBuffer;
@@ -25,6 +26,10 @@ public class TestClassPathProvider extends TestCase {
 		finally {
 			bytes.close();
 		}
+	}
+	
+	public void testRootDirectory() throws IOException, URISyntaxException {
+		assertTrue(ResourceFactory.getInstance().resolve(new URI("classpath:/"), null) instanceof ResourceContainer);
 	}
 	
 	public void testDirectory() throws IOException, URISyntaxException {
