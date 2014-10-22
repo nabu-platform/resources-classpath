@@ -6,40 +6,33 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import be.nabu.libs.resources.URIUtils;
-import be.nabu.libs.resources.api.ReadableResource;
+import be.nabu.libs.resources.api.Resource;
 import be.nabu.libs.resources.api.ResourceContainer;
 import be.nabu.libs.resources.api.ResourceRoot;
-import be.nabu.utils.io.ContentTypeMap;
-import be.nabu.utils.io.IOUtils;
-import be.nabu.utils.io.api.ByteBuffer;
-import be.nabu.utils.io.api.ReadableContainer;
 
-public class ClassPathResource implements ReadableResource, ResourceRoot {
+/**
+ * It can not list children and it can not point to an actual directory
+ * But it can resolve specific children if asked
+ * For example you could build a resource container around "test", 
+ * then request "example.txt" and you would get the resource "test/example.txt" 
+ */
+abstract public class ClassPathResource implements Resource, ResourceRoot {
 
+	private ClassPathResourceContainer parent;
 	private URL url;
-	
+
 	public ClassPathResource(URL url) {
 		this.url = url;
 	}
 	
-	@Override
-	public void close() throws IOException {
-		// do nothing
+	ClassPathResource(ClassPathResourceContainer parent, URL url) {
+		this.parent = parent;
+		this.url = url;
 	}
-
-	@Override
-	public URI getURI() {
-		try {
-			return url.toURI();
-		}
-		catch (URISyntaxException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
+	
 	@Override
 	public String getContentType() {
-		return ContentTypeMap.getInstance().getContentTypeFor(url.getPath());
+		return Resource.CONTENT_TYPE_DIRECTORY;
 	}
 
 	@Override
@@ -54,12 +47,25 @@ public class ClassPathResource implements ReadableResource, ResourceRoot {
 
 	@Override
 	public ResourceContainer<?> getParent() {
-		return null;
+		return parent;
 	}
 
 	@Override
-	public ReadableContainer<ByteBuffer> getReadable() throws IOException {
-		return IOUtils.wrap(url.openStream());
+	public URI getURI() {
+		try {
+			return url.toURI();
+		}
+		catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
+	@Override
+	public void close() throws IOException {
+		// do nothing
+	}
+	
+	URL getURL() {
+		return url;
+	}
 }
