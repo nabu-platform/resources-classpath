@@ -29,6 +29,9 @@ public class ClassPathResourceContainer extends ClassPathResource implements Res
 	@Override
 	public ClassPathResource getChild(String name) {
 		String childPath = path == null ? name : path + "/" + name;
+		if (childPath.startsWith("/")) {
+			childPath = childPath.substring(1);
+		}
 		URL url = Thread.currentThread().getContextClassLoader().getResource(childPath);
 		if (url == null) {
 			return null;
@@ -40,4 +43,8 @@ public class ClassPathResourceContainer extends ClassPathResource implements Res
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "classpath:" + getURI().toString();
+	}
 }
