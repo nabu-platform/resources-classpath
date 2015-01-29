@@ -12,7 +12,7 @@ public class ClassPathResourceContainer extends ClassPathResource implements Res
 
 	ClassPathResourceContainer(URL url, String path) {
 		super(url);
-		this.path = path.replaceAll("[/]+$", "");
+		this.path = path == null ? null : path.replaceAll("[/]+$", "");
 	}
 	
 	ClassPathResourceContainer(ClassPathResourceContainer parent, URL url, String path) {
