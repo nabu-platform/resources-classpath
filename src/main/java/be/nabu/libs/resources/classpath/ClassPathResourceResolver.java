@@ -20,8 +20,12 @@ public class ClassPathResourceResolver implements ResourceResolver {
 	@Override
 	public ResourceRoot getResource(URI uri, Principal principal) {
 		String path = uri.getPath();
-		if (path.startsWith("/"))
+		if (path.equals("/")) {
+			return new ClassPathResourceContainer(null, null);
+		}
+		else if (path.startsWith("/")) {
 			path = path.substring(1);
+		}
 		URL url = Thread.currentThread().getContextClassLoader().getResource(path);
 		if (url == null) {
 			return null;
@@ -38,7 +42,7 @@ public class ClassPathResourceResolver implements ResourceResolver {
 		if (url.getPath().endsWith("/")) {
 			return true;
 		}
-		// A directory will also return a URL and it will even return a stream when asked...
+		// In some cases a directory will also return a URL and it will even return a stream when asked...
 		// the stream contains all the files in said directory
 		// We however need to differentiate between directories and files, one (probably implementation-specific) way to do this is to check the type of inputstream
 		// because the dir returns a listing built in memory, it is usually a byte array input stream, whereas an actual resource is streamed from the backend
@@ -50,7 +54,13 @@ public class ClassPathResourceResolver implements ResourceResolver {
 				return input instanceof ByteArrayInputStream;
 			}
 			finally {
-				input.close();
+				try {
+					input.close();
+				}
+				// streaming from a jar apparently throws a NPE (tested in java 7)
+				catch (NullPointerException e) {
+					return true;
+				}
 			}
 		}
 		catch(IOException e) {
