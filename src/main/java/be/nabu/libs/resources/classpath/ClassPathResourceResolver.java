@@ -9,8 +9,8 @@ import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
 
+import be.nabu.libs.resources.api.Resource;
 import be.nabu.libs.resources.api.ResourceResolver;
-import be.nabu.libs.resources.api.ResourceRoot;
 
 public class ClassPathResourceResolver implements ResourceResolver {
 	
@@ -18,7 +18,7 @@ public class ClassPathResourceResolver implements ResourceResolver {
 
 	@SuppressWarnings("resource")
 	@Override
-	public ResourceRoot getResource(URI uri, Principal principal) {
+	public Resource getResource(URI uri, Principal principal) {
 		String path = uri.getPath();
 		if (path.equals("/")) {
 			return new ClassPathResourceContainer(null, null);

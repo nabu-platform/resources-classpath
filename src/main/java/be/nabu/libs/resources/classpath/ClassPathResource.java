@@ -1,14 +1,15 @@
 package be.nabu.libs.resources.classpath;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
 import be.nabu.libs.resources.URIUtils;
+import be.nabu.libs.resources.api.LocatableResource;
 import be.nabu.libs.resources.api.Resource;
 import be.nabu.libs.resources.api.ResourceContainer;
-import be.nabu.libs.resources.api.ResourceRoot;
 
 /**
  * It can not list children and it can not point to an actual directory
@@ -16,7 +17,7 @@ import be.nabu.libs.resources.api.ResourceRoot;
  * For example you could build a resource container around "test", 
  * then request "example.txt" and you would get the resource "test/example.txt" 
  */
-abstract public class ClassPathResource implements Resource, ResourceRoot {
+abstract public class ClassPathResource implements Resource, Closeable, LocatableResource {
 
 	private ClassPathResourceContainer parent;
 	private URL url;

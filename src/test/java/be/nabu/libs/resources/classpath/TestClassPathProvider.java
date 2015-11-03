@@ -11,7 +11,6 @@ import be.nabu.libs.resources.ResourceUtils;
 import be.nabu.libs.resources.api.ReadableResource;
 import be.nabu.libs.resources.api.Resource;
 import be.nabu.libs.resources.api.ResourceContainer;
-import be.nabu.libs.resources.api.ResourceRoot;
 import be.nabu.utils.io.IOUtils;
 import be.nabu.utils.io.api.ByteBuffer;
 import be.nabu.utils.io.api.ReadableContainer;
@@ -33,7 +32,7 @@ public class TestClassPathProvider extends TestCase {
 	}
 	
 	public void testDirectory() throws IOException, URISyntaxException {
-		ResourceRoot resourceRoot = ResourceFactory.getInstance().resolve(new URI("classpath:/testDir"), null);
+		Resource resourceRoot = ResourceFactory.getInstance().resolve(new URI("classpath:/testDir"), null);
 		Resource resource = ResourceUtils.resolve(resourceRoot, "test.txt");
 		ReadableContainer<ByteBuffer> bytes = new ResourceReadableContainer((ReadableResource) resource);
 		try {
