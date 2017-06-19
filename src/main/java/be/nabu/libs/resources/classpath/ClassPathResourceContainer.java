@@ -45,6 +45,6 @@ public class ClassPathResourceContainer extends ClassPathResource implements Res
 
 	@Override
 	public String toString() {
-		return "classpath:" + getURI().toString();
+		return "classpath:" + getUri().toString();
 	}
 }

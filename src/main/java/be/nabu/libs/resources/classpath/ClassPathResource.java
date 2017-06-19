@@ -52,7 +52,7 @@ abstract public class ClassPathResource implements Resource, Closeable, Locatabl
 	}
 
 	@Override
-	public URI getURI() {
+	public URI getUri() {
 		try {
 			return url.toURI();
 		}
